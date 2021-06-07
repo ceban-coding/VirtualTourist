@@ -14,6 +14,7 @@
 		D64C0844266EBD2B007A8AB7 /* VirtualTourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D64C0842266EBD2B007A8AB7 /* VirtualTourist.xcdatamodeld */; };
 		D64C0846266EBD2D007A8AB7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D64C0845266EBD2D007A8AB7 /* Assets.xcassets */; };
 		D64C0849266EBD2D007A8AB7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D64C0847266EBD2D007A8AB7 /* LaunchScreen.storyboard */; };
+		D64C0852266EC57F007A8AB7 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C0851266EC57F007A8AB7 /* PhotoAlbumViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		D64C0845266EBD2D007A8AB7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D64C0848266EBD2D007A8AB7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D64C084A266EBD2D007A8AB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D64C0851266EC57F007A8AB7 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,7 +62,7 @@
 			children = (
 				D64C0839266EBD2B007A8AB7 /* AppDelegate.swift */,
 				D64C083B266EBD2B007A8AB7 /* SceneDelegate.swift */,
-				D64C083D266EBD2B007A8AB7 /* ViewController.swift */,
+				D64C0850266EC55E007A8AB7 /* Controllers */,
 				D64C083F266EBD2B007A8AB7 /* Main.storyboard */,
 				D64C0845266EBD2D007A8AB7 /* Assets.xcassets */,
 				D64C0847266EBD2D007A8AB7 /* LaunchScreen.storyboard */,
@@ -68,6 +70,15 @@
 				D64C0842266EBD2B007A8AB7 /* VirtualTourist.xcdatamodeld */,
 			);
 			path = VirtualTourist;
+			sourceTree = "<group>";
+		};
+		D64C0850266EC55E007A8AB7 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				D64C083D266EBD2B007A8AB7 /* ViewController.swift */,
+				D64C0851266EC57F007A8AB7 /* PhotoAlbumViewController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -143,6 +154,7 @@
 				D64C0844266EBD2B007A8AB7 /* VirtualTourist.xcdatamodeld in Sources */,
 				D64C083E266EBD2B007A8AB7 /* ViewController.swift in Sources */,
 				D64C083A266EBD2B007A8AB7 /* AppDelegate.swift in Sources */,
+				D64C0852266EC57F007A8AB7 /* PhotoAlbumViewController.swift in Sources */,
 				D64C083C266EBD2B007A8AB7 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
