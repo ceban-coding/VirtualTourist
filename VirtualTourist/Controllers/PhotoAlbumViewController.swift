@@ -5,10 +5,22 @@
 //  Created by Ion Ceban on 6/7/21.
 //
 
+import Foundation
 import UIKit
+import MapKit
+import CoreData
 
-class PhotoAlbumViewController: UIViewController {
-
+class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
+    
+    
+    //MARK: - Outlets
+    
+    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -18,11 +30,7 @@ class PhotoAlbumViewController: UIViewController {
 
     //MARK: - Action Buttons
     
-    @IBAction func backButton(_ sender: Any) {
-    }
-    
-    
-    @IBAction func newCollectionButton(_ sender: Any) {
+    @IBAction func newCollectionButtonPressed(_ sender: Any) {
         
     }
     
