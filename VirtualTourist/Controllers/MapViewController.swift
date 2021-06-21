@@ -18,14 +18,21 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var mapView: MKMapView!
     
+    
+    // MARK: - Properties
+    var dataController: DataController!
     let manager = CLLocationManager()
     
+    //MARK: - LifeCycle Functions
+ 
     override func viewDidLoad() {
-        super.viewDidLoad()
         
+        super.viewDidLoad()
         let longPressGestureRecogn = UILongPressGestureRecognizer(target: self, action: #selector(addAnotation(press:)))
         longPressGestureRecogn.minimumPressDuration = 1.0
         mapView.addGestureRecognizer(longPressGestureRecogn)
+        
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -36,6 +43,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         manager.startUpdatingLocation()
     }
     
+    
+   
    
 
     //MARK: - Action Buttons
@@ -57,14 +66,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         {
             let location = press.location(in: mapView)
             let coordinates = mapView.convert(location, toCoordinateFrom: mapView)
-            
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinates
-            
-            annotation.title = "Photo Album"
-            annotation.subtitle = "press for open Album"
-            
+            annotation.title = "Photos"
             mapView.addAnnotation(annotation)
+           
             
         }
     }
@@ -92,8 +98,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     
-    
-    
+
+
+
+
+
+
+
 }
-
-

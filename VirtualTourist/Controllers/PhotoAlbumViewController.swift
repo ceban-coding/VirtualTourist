@@ -12,6 +12,8 @@ import CoreData
 
 class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
     
+
+    
     
     //MARK: - Outlets
     
@@ -24,6 +26,7 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+                // The persistent container is available.
         
     }
     
@@ -33,5 +36,7 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
     @IBAction func newCollectionButtonPressed(_ sender: Any) {
         
     }
+    
+    
     
 }

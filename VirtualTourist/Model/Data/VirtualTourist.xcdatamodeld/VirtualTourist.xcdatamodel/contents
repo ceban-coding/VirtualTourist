@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20F71" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="PhotoEntity" representedClassName="PhotoEntity" syncable="YES" codeGenerationType="class"/>
-    <entity name="PinEntity" representedClassName="PinEntity" syncable="YES" codeGenerationType="class"/>
+    <entity name="Photo" representedClassName="Photo" syncable="YES" codeGenerationType="class">
+        <attribute name="cerationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="imageURL" optional="YES" attributeType="String"/>
+        <relationship name="pin" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pin" inverseName="photos" inverseEntity="Pin"/>
+    </entity>
+    <entity name="Pin" representedClassName="Pin" syncable="YES" codeGenerationType="class">
+        <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="long" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="pin" inverseEntity="Photo"/>
+    </entity>
     <elements>
-        <element name="PinEntity" positionX="-63" positionY="-18" width="128" height="29"/>
-        <element name="PhotoEntity" positionX="-54" positionY="-9" width="128" height="29"/>
+        <element name="Photo" positionX="-2137.56591796875" positionY="765.8209838867188" width="128" height="89"/>
+        <element name="Pin" positionX="-2407.351928710938" positionY="764.8497924804688" width="128" height="88"/>
     </elements>
 </model>
