@@ -21,6 +21,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     
     // MARK: - Properties
     var dataController: DataController!
+    var annotations = [Pin]()
     let manager = CLLocationManager()
     
     //MARK: - LifeCycle Functions
@@ -28,7 +29,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        let longPressGestureRecogn = UILongPressGestureRecognizer(target: self, action: #selector(addAnotation(press:)))
+        let longPressGestureRecogn = UILongPressGestureRecognizer(target: self, action: #selector(addAnotation(_ :)))
         longPressGestureRecogn.minimumPressDuration = 1.0
         mapView.addGestureRecognizer(longPressGestureRecogn)
         
@@ -61,18 +62,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     
    //MARK: - Add pin annotation
     
-    @objc func addAnotation(press:UILongPressGestureRecognizer) {
-        if press.state == .began
-        {
-            let location = press.location(in: mapView)
-            let coordinates = mapView.convert(location, toCoordinateFrom: mapView)
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = coordinates
-            annotation.title = "Photos"
-            mapView.addAnnotation(annotation)
-           
-            
-        }
+    @objc func addAnotation(_ sender: UILongPressGestureRecognizer) {
+        guard sender.state == UIGestureRecognizer.State.began else { return }
+        let location = sender.location(in: mapView)
+        let myCoordinate: CLLocationCoordinate2D = mapView.convert(location, toCoordinateFrom: mapView)
+        let myPin: MKPointAnnotation = MKPointAnnotation()
+        myPin.coordinate = myCoordinate
+        mapView.addAnnotation(myPin)
+        let pin = Pin(context: DataController.shared.viewContext)
+        pin.lat = Double(myCoordinate.latitude)
+        pin.long = Double(myCoordinate.longitude)
+        annotations.append(pin)
+        DataController.shared.save()
     }
     
     
