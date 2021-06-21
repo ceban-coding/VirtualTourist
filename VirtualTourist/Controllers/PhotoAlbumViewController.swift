@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreData
 
-class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource  {
     
     
     //MARK: - Outlets
@@ -21,9 +21,33 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     
     
+    //MARK: - Properties
+    
     var currentLatitude: Double?
     var currentLongitude: Double?
+    let spacingBetweenItems:CGFloat = 5
  
+    
+    
+    //MARK: - LifeCycle Fuctions
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        mapView.delegate = self
+        setCenter()
+        view.layer.cornerRadius = 8.0
+        
+        // Flow layout
+        let space: CGFloat = 3.0
+        let dimension = (self.view.frame.size.width - (2 * space)) / 3.0
+        
+        flowLayout.minimumInteritemSpacing = spacingBetweenItems
+        flowLayout.minimumLineSpacing = spacingBetweenItems
+        flowLayout.itemSize = CGSize(width: dimension, height: dimension)
+    }
+    
+    
+    
     
     //MARK: - Set up Collcetion View
     
@@ -32,17 +56,24 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FlickrViewCell", for: indexPath) as! FlickrViewCell
+         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FlickrViewCell", for: indexPath) as! FlickrViewCell
         
         return cell
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        mapView.delegate = self
-        setCenter()
-                
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let width = UIScreen.main.bounds.width / 3 - spacingBetweenItems
+        let height = width
+        return CGSize(width: width, height: height)
     }
+   
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        
+        return spacingBetweenItems
+    }
+    
     
 
     //MARK: - Action Buttons

@@ -22,7 +22,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     // MARK: - Properties
     
     fileprivate let locationManager: CLLocationManager = CLLocationManager()
-    var dataController: DataController!
     var fetchResultController: NSFetchedResultsController<Pin>!
     var annotations = [Pin]()
     var savedPins = [MKPointAnnotation]()

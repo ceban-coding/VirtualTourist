@@ -9,7 +9,10 @@ import UIKit
 
 class FlickrViewCell: UICollectionViewCell {
     
+
     
     @IBOutlet weak var photoImage: UIImageView!
     
+    
+  
 }
