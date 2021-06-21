@@ -10,7 +10,7 @@ import MapKit
 import CoreData
 import CoreLocation
 
-class MapViewController: UIViewController, CLLocationManagerDelegate {
+class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
   
     //MARK: - Outlets 
     
@@ -20,15 +20,19 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     
     
     // MARK: - Properties
+    
+    fileprivate let locationManager: CLLocationManager = CLLocationManager()
     var dataController: DataController!
     var annotations = [Pin]()
     let manager = CLLocationManager()
+    var latitude: Double?
+    var longitude: Double?
     
     //MARK: - LifeCycle Functions
  
     override func viewDidLoad() {
-        
         super.viewDidLoad()
+        mapView.delegate = self
         let longPressGestureRecogn = UILongPressGestureRecognizer(target: self, action: #selector(addAnotation(_ :)))
         longPressGestureRecogn.minimumPressDuration = 1.0
         mapView.addGestureRecognizer(longPressGestureRecogn)
@@ -67,6 +71,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         let location = sender.location(in: mapView)
         let myCoordinate: CLLocationCoordinate2D = mapView.convert(location, toCoordinateFrom: mapView)
         let myPin: MKPointAnnotation = MKPointAnnotation()
+        myPin.title = "Photos"
         myPin.coordinate = myCoordinate
         mapView.addAnnotation(myPin)
         let pin = Pin(context: DataController.shared.viewContext)
@@ -93,6 +98,34 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         mapView.setRegion(region, animated: true)
     }
     
+    //MARK: - Map view functions
     
+    //Push to PhotoViewControler from annotation
+   func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+    let vc = storyboard?.instantiateViewController(identifier: "photoAlbumViewController") as! PhotoAlbumViewController
+    let locationLat = view.annotation?.coordinate.latitude
+    let locationLon = view.annotation?.coordinate.longitude
+    let myCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: locationLat!, longitude: locationLon!)
+    let selectedPin: MKPointAnnotation = MKPointAnnotation()
+    selectedPin.coordinate = myCoordinate
+    vc.currentLatitude = myCoordinate.latitude
+    vc.currentLongitude = myCoordinate.longitude
+    navigationController?.pushViewController(vc, animated: true)
+    }
 
+    //Returns the View associated with the specified annotation object
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let identifer = "annotation"
+        var view = mapView.dequeueReusableAnnotationView(withIdentifier: identifer) as? MKPinAnnotationView
+        if view == nil {
+            view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifer)
+            view!.canShowCallout = true
+            view!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+            return view
+        } else {
+            view!.annotation = annotation
+        }
+        return view
+    }
+    
 }
