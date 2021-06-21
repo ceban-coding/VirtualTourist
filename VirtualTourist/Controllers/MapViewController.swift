@@ -10,7 +10,7 @@ import MapKit
 import CoreData
 import CoreLocation
 
-class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
+class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, NSFetchedResultsControllerDelegate {
   
     //MARK: - Outlets 
     
@@ -23,7 +23,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
     fileprivate let locationManager: CLLocationManager = CLLocationManager()
     var dataController: DataController!
+    var fetchResultController: NSFetchedResultsController<Pin>!
     var annotations = [Pin]()
+    var savedPins = [MKPointAnnotation]()
     let manager = CLLocationManager()
     var latitude: Double?
     var longitude: Double?
@@ -32,6 +34,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
  
     override func viewDidLoad() {
         super.viewDidLoad()
+        setUpFetchedResultsController()
         mapView.delegate = self
         let longPressGestureRecogn = UILongPressGestureRecognizer(target: self, action: #selector(addAnotation(_ :)))
         longPressGestureRecogn.minimumPressDuration = 1.0
@@ -49,7 +52,27 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     }
     
     
-   
+   //MARK: - FetchRequest
+    fileprivate func setUpFetchedResultsController() {
+        let fetchRequest: NSFetchRequest<Pin> = Pin.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        if let result = try? DataController.shared.viewContext.fetch(fetchRequest) {
+            annotations = result
+            for annotation in annotations {
+                let savePin = MKPointAnnotation()
+                if let lat = CLLocationDegrees(exactly: annotation.lat), let long = CLLocationDegrees(exactly: annotation.long) {
+                    let coordinateLocation = CLLocationCoordinate2D(latitude: lat, longitude: long)
+                    savePin.coordinate = coordinateLocation
+                    savePin.title = "Photos"
+                    savedPins.append(savePin)
+                }
+            }
+            mapView.addAnnotations(savedPins)
+        }
+    }
+    
    
 
     //MARK: - Action Buttons
