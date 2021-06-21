@@ -84,7 +84,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </activityIndicatorView>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FlickrViewCell" id="huk-5A-fx4">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FlickrViewCell" id="huk-5A-fx4" customClass="FlickrViewCell" customModule="VirtualTourist" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="7Mb-S1-kl0">
@@ -102,6 +102,9 @@
                                                 <constraint firstAttribute="bottom" secondItem="qKF-c3-GpX" secondAttribute="bottom" id="kCE-r0-4EI"/>
                                             </constraints>
                                         </collectionViewCellContentView>
+                                        <connections>
+                                            <outlet property="photoImage" destination="qKF-c3-GpX" id="doS-H3-Rwi"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
