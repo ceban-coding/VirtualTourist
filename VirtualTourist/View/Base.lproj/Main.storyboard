@@ -139,7 +139,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="LjI-Ab-0Ua"/>
                     <connections>
-                        <outlet property="activityIndicator" destination="B0p-8F-Cau" id="Hku-UQ-f9A"/>
+                        <outlet property="activityIndicator" destination="B0p-8F-Cau" id="1r2-ES-13T"/>
                         <outlet property="collectionView" destination="1i6-7h-K78" id="Yji-s0-aTd"/>
                         <outlet property="flowLayout" destination="55K-IX-dPC" id="txR-V8-iok"/>
                         <outlet property="mapView" destination="zSE-Fw-Plv" id="7TF-X6-6Zr"/>

@@ -17,16 +17,18 @@ class PhotoAlbumViewController: UIViewController {
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     
     //MARK: - Properties
     
     var currentLatitude: Double?
     var currentLongitude: Double?
-    let spacingBetweenItems:CGFloat = 5
- 
+    var pin: Pin!
+    var flickrPhotos: [URL]?
+    var savedImages: [Photo] = []
+    let numbersOfColumns: CGFloat = 3
     
     
     //MARK: - LifeCycle Fuctions
@@ -34,19 +36,33 @@ class PhotoAlbumViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
+        collectionView.delegate = self
+        collectionView.dataSource = self
         setCenter()
-        setColectionView()
+        
+        // Make a call to FlikrClient
+        
+        _ = FlickrClient.shared.getFlickrPhotos(lat: currentLatitude!, lon: currentLongitude!, page: 1, completion: { (urls, error) in
+            if let error = error {
+                DispatchQueue.main.async {
+                    let alertVc = UIAlertController(title: "Error", message: "Error retrieving data", preferredStyle: .alert)
+                    alertVc.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+                    self.present(alertVc, animated: true)
+                    print(error.localizedDescription)
+                }
+            } else {
+                if let urls = urls {
+                    self.flickrPhotos = urls
+                    DispatchQueue.main.async {
+                        self.collectionView.reloadData()
+                    }
+                }
+            }
+        })
         
     }
     
     
-    func setColectionView() {
-        let space: CGFloat = 3.0
-        let dimension = (self.view.frame.size.width - (2 * space)) / 3.0
-        flowLayout.minimumInteritemSpacing = spacingBetweenItems
-        flowLayout.minimumLineSpacing = spacingBetweenItems
-        flowLayout.itemSize = CGSize(width: dimension, height: dimension)
-    }
     
     
     
@@ -87,26 +103,47 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
     
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 25
+        return flickrPhotos?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FlickrViewCell", for: indexPath) as! FlickrViewCell
-        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FlickrViewCell", for: indexPath) as! FlickrViewCell
+        if let desiredArray = flickrPhotos {
+            cell.setupCell(url: desiredArray[indexPath.row])
+        }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let width = UIScreen.main.bounds.width / 3 - spacingBetweenItems
-        let height = width
-        return CGSize(width: width, height: height)
+        let width = collectionView.frame.width / numbersOfColumns
+        return CGSize(width: width, height: width)
     }
    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+           return .zero
+       }
+ 
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        
-        return spacingBetweenItems
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+ 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath)
+        cell?.layer.borderColor = UIColor.blue.cgColor
+        cell?.layer.borderWidth = 1
+        cell?.isSelected = true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath)
+        cell?.layer.borderColor = UIColor.clear.cgColor
+        cell?.layer.borderWidth = 1
+        cell?.isSelected = false
     }
     
 }

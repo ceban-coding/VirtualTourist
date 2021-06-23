@@ -7,6 +7,8 @@
 
 import Foundation
 
+
+// Store App Data
 class FlickrImages {
     static var flickrImages = [FlickrPhoto]()
 }

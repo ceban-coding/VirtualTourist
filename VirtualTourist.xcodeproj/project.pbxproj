@@ -20,6 +20,7 @@
 		D6A4BD98268115B200EEB44E /* FlickrClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A4BD97268115B200EEB44E /* FlickrClient.swift */; };
 		D6A4BD9A26811C3B00EEB44E /* FlickrPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A4BD9926811C3B00EEB44E /* FlickrPhoto.swift */; };
 		D6A4BD9C26811EB400EEB44E /* FlickrImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A4BD9B26811EB400EEB44E /* FlickrImage.swift */; };
+		D6E2A41D26839DDD002AE0EA /* NetwokErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E2A41C26839DDD002AE0EA /* NetwokErrors.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		D6A4BD97268115B200EEB44E /* FlickrClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrClient.swift; sourceTree = "<group>"; };
 		D6A4BD9926811C3B00EEB44E /* FlickrPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrPhoto.swift; sourceTree = "<group>"; };
 		D6A4BD9B26811EB400EEB44E /* FlickrImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrImage.swift; sourceTree = "<group>"; };
+		D6E2A41C26839DDD002AE0EA /* NetwokErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetwokErrors.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				D6A4BD97268115B200EEB44E /* FlickrClient.swift */,
+				D6E2A41C26839DDD002AE0EA /* NetwokErrors.swift */,
 			);
 			path = FlickrAPI;
 			sourceTree = "<group>";
@@ -219,6 +222,7 @@
 				D64C0844266EBD2B007A8AB7 /* VirtualTourist.xcdatamodeld in Sources */,
 				D65F35A62679260C00D6D0F3 /* DataController.swift in Sources */,
 				D64C083E266EBD2B007A8AB7 /* MapViewController.swift in Sources */,
+				D6E2A41D26839DDD002AE0EA /* NetwokErrors.swift in Sources */,
 				D6A4BD9A26811C3B00EEB44E /* FlickrPhoto.swift in Sources */,
 				D64C083A266EBD2B007A8AB7 /* AppDelegate.swift in Sources */,
 				D64C0852266EC57F007A8AB7 /* PhotoAlbumViewController.swift in Sources */,
