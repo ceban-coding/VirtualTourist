@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreData
 
-class PhotoAlbumViewController: UIViewController {
+class PhotoAlbumViewController: UIViewController, UICollectionViewDelegateFlowLayout {
     
     
     //MARK: - Outlets
@@ -39,12 +39,21 @@ class PhotoAlbumViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         setCenter()
-        
-        // Make a call to FlikrClient
-        
+        getFlickrPhoto()
+        activityIndicator.startAnimating()
+    }
+    
+    
+    
+    //MARK: - Methods
+    
+    
+    // Make a call to FlikrClient
+    func getFlickrPhoto() {
         _ = FlickrClient.shared.getFlickrPhotos(lat: currentLatitude!, lon: currentLongitude!, page: 1, completion: { (urls, error) in
             if let error = error {
                 DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
                     let alertVc = UIAlertController(title: "Error", message: "Error retrieving data", preferredStyle: .alert)
                     alertVc.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
                     self.present(alertVc, animated: true)
@@ -55,15 +64,12 @@ class PhotoAlbumViewController: UIViewController {
                     self.flickrPhotos = urls
                     DispatchQueue.main.async {
                         self.collectionView.reloadData()
+                        self.activityIndicator.stopAnimating()
                     }
                 }
             }
         })
-        
     }
-    
-    
-    
     
     
 
@@ -97,7 +103,7 @@ extension PhotoAlbumViewController: MKMapViewDelegate {
 }
 
 
-//MARK: - Set up Collcetion View
+//MARK: - Set up Collcetion View Delegates
 
 extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     

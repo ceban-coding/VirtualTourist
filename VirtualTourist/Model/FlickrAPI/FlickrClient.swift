@@ -65,9 +65,8 @@ class FlickrClient {
                     let Photos = photoData.photos.photo
                     if let addUrl: URL = URL(string: Photos[i].imageURLString()){
                         urlData.append(addUrl)
-                    }
+                   }
                 }
-                
                 completion(urlData, nil)
             } catch {
                 completion(nil, error)
