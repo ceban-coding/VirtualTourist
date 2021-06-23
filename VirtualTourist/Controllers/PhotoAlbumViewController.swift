@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreData
 
-class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource  {
+class PhotoAlbumViewController: UIViewController {
     
     
     //MARK: - Outlets
@@ -35,44 +35,19 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
         super.viewDidLoad()
         mapView.delegate = self
         setCenter()
-        view.layer.cornerRadius = 8.0
+        setColectionView()
         
-        // Flow layout
+    }
+    
+    
+    func setColectionView() {
         let space: CGFloat = 3.0
         let dimension = (self.view.frame.size.width - (2 * space)) / 3.0
-        
         flowLayout.minimumInteritemSpacing = spacingBetweenItems
         flowLayout.minimumLineSpacing = spacingBetweenItems
         flowLayout.itemSize = CGSize(width: dimension, height: dimension)
     }
     
-    
-    
-    
-    //MARK: - Set up Collcetion View
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 25
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FlickrViewCell", for: indexPath) as! FlickrViewCell
-        
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let width = UIScreen.main.bounds.width / 3 - spacingBetweenItems
-        let height = width
-        return CGSize(width: width, height: height)
-    }
-   
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        
-        return spacingBetweenItems
-    }
     
     
 
@@ -103,4 +78,35 @@ extension PhotoAlbumViewController: MKMapViewDelegate {
             mapView.addAnnotation(annotation)
         }
     }
+}
+
+
+//MARK: - Set up Collcetion View
+
+extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 25
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FlickrViewCell", for: indexPath) as! FlickrViewCell
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let width = UIScreen.main.bounds.width / 3 - spacingBetweenItems
+        let height = width
+        return CGSize(width: width, height: height)
+    }
+   
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        
+        return spacingBetweenItems
+    }
+    
 }

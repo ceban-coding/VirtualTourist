@@ -107,10 +107,6 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <connections>
-                                    <outlet property="dataSource" destination="31k-Aa-K4L" id="JHo-9h-373"/>
-                                    <outlet property="delegate" destination="31k-Aa-K4L" id="97P-zV-EP4"/>
-                                </connections>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mg3-y4-TpG">
                                 <rect key="frame" x="0.0" y="807" width="414" height="55"/>
