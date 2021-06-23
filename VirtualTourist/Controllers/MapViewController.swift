@@ -32,7 +32,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     //MARK: - LifeCycle Functions
  
     override func viewDidLoad() {
+        // Do any additional setup after loading th view
         super.viewDidLoad()
+        cancelButton.isEnabled = false
         setUpFetchedResultsController()
         mapView.delegate = self
         let longPressGestureRecogn = UILongPressGestureRecognizer(target: self, action: #selector(addAnotation(_ :)))
@@ -78,12 +80,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
     
     @IBAction func cancelButtonPressed(_ sender: Any) {
+        editButton.isEnabled = true
+        cancelButton.isEnabled = false
         
     }
     
     
     @IBAction func editButtonPressed(_ sender: Any) {
-        
+        editButton.isEnabled = false
+        cancelButton.isEnabled = true
     }
     
    //MARK: - Add pin annotation
