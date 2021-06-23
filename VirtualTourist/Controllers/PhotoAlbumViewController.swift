@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreData
 
-class PhotoAlbumViewController: UIViewController, UICollectionViewDelegateFlowLayout {
+class PhotoAlbumViewController: UIViewController {
     
     
     //MARK: - Outlets
@@ -19,7 +19,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegateFlowLa
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    
+    @IBOutlet weak var newCollectionViewBtn: UIButton!
     
     //MARK: - Properties
     
@@ -105,7 +105,11 @@ extension PhotoAlbumViewController: MKMapViewDelegate {
 
 //MARK: - Set up Collcetion View Delegates
 
-extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
     
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -126,7 +130,7 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
     }
    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-           return .zero
+        return .zero
        }
  
     
@@ -139,17 +143,11 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
     }
  
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath)
-        cell?.layer.borderColor = UIColor.blue.cgColor
-        cell?.layer.borderWidth = 1
-        cell?.isSelected = true
+      
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath)
-        cell?.layer.borderColor = UIColor.clear.cgColor
-        cell?.layer.borderWidth = 1
-        cell?.isSelected = false
+       
     }
     
 }
