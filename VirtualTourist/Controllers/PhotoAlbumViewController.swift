@@ -50,13 +50,11 @@ class PhotoAlbumViewController: UIViewController {
     
     // Make a call to FlikrClient
     func getFlickrPhoto() {
-        _ = FlickrClient.shared.getFlickrPhotos(lat: currentLatitude!, lon: currentLongitude!, page: 1, completion: { (urls, error) in
+        FlickrClient.shared.getFlickrPhotos(lat: currentLatitude!, lon: currentLongitude!, page: 1, completion: { (urls, error) in
             if let error = error {
                 DispatchQueue.main.async {
                     self.activityIndicator.stopAnimating()
-                    let alertVc = UIAlertController(title: "Error", message: "Error retrieving data", preferredStyle: .alert)
-                    alertVc.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-                    self.present(alertVc, animated: true)
+                    self.showAlertMessage()
                     print(error.localizedDescription)
                 }
             } else {
@@ -71,6 +69,12 @@ class PhotoAlbumViewController: UIViewController {
         })
     }
     
+    
+    func showAlertMessage() {
+        let alertVc = UIAlertController(title: "Error", message: "Error retrieving data", preferredStyle: .alert)
+        alertVc.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        self.present(alertVc, animated: true)
+    }
     
 
     //MARK: - Action Buttons
