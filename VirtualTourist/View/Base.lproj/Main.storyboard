@@ -78,7 +78,7 @@
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
-                                <activityIndicatorView key="backgroundView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" id="B0p-8F-Cau">
+                                <activityIndicatorView key="backgroundView" hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" id="B0p-8F-Cau">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="583"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </activityIndicatorView>
@@ -93,16 +93,35 @@
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qKF-c3-GpX" userLabel="Photo Image">
                                                     <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                                 </imageView>
+                                                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="u4f-dj-SSF" userLabel="Highlight View">
+                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                    <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </imageView>
+                                                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_check" translatesAutoresizingMaskIntoConstraints="NO" id="MKi-Lk-6NM" userLabel="SelectedIndicator View">
+                                                    <rect key="frame" x="90" y="90" width="30" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="30" id="PW0-3b-rIc"/>
+                                                        <constraint firstAttribute="height" constant="30" id="vUD-BI-Md7"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="u4f-dj-SSF" secondAttribute="bottom" id="BzJ-Xn-Tz5"/>
                                                 <constraint firstAttribute="trailing" secondItem="qKF-c3-GpX" secondAttribute="trailing" id="EhO-ss-Sud"/>
+                                                <constraint firstItem="u4f-dj-SSF" firstAttribute="top" secondItem="7Mb-S1-kl0" secondAttribute="top" id="ExK-hr-I53"/>
+                                                <constraint firstAttribute="trailing" secondItem="MKi-Lk-6NM" secondAttribute="trailing" constant="8" id="FJC-Cd-Hjp"/>
+                                                <constraint firstItem="u4f-dj-SSF" firstAttribute="leading" secondItem="7Mb-S1-kl0" secondAttribute="leading" id="G4Z-Ld-ppb"/>
                                                 <constraint firstItem="qKF-c3-GpX" firstAttribute="leading" secondItem="7Mb-S1-kl0" secondAttribute="leading" id="Z5F-jh-Pq4"/>
                                                 <constraint firstItem="qKF-c3-GpX" firstAttribute="top" secondItem="7Mb-S1-kl0" secondAttribute="top" id="aZp-uq-31Y"/>
+                                                <constraint firstAttribute="bottom" secondItem="MKi-Lk-6NM" secondAttribute="bottom" constant="8" id="dSB-UP-NxQ"/>
                                                 <constraint firstAttribute="bottom" secondItem="qKF-c3-GpX" secondAttribute="bottom" id="kCE-r0-4EI"/>
+                                                <constraint firstAttribute="trailing" secondItem="u4f-dj-SSF" secondAttribute="trailing" id="ush-Hi-bS9"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <connections>
+                                            <outlet property="highlightIndicator" destination="u4f-dj-SSF" id="mkn-Ni-fqg"/>
                                             <outlet property="photoImage" destination="qKF-c3-GpX" id="doS-H3-Rwi"/>
+                                            <outlet property="selectIndicator" destination="MKi-Lk-6NM" id="GeX-Va-YcE"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -169,6 +188,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="ic_check" width="30" height="30"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

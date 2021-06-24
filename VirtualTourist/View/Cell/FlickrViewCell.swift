@@ -9,9 +9,27 @@ import UIKit
 
 class FlickrViewCell: UICollectionViewCell {
     
-
-    
+    //MARK: - Outles
     @IBOutlet weak var photoImage: UIImageView!
+    @IBOutlet weak var highlightIndicator: UIImageView!
+    @IBOutlet weak var selectIndicator: UIImageView!
+    
+    //MARK: - Set highlited and selected indicator
+    
+    // Highlited indicator
+    override var isHighlighted: Bool {
+        didSet {
+            highlightIndicator.isHidden = !isHighlighted
+        }
+    }
+    
+    override var isSelected: Bool {
+        didSet {
+            highlightIndicator.isHidden = !isSelected
+            selectIndicator.isHidden = !isSelected
+            
+        }
+    }
     
     
 //    func setImageFrom(url: URL, placeholderImage: UIImage? = nil, completionHandler: @escaping (UIImage?, Error?) -> Void) {

@@ -31,6 +31,7 @@ class PhotoAlbumViewController: UIViewController {
     let numbersOfColumns: CGFloat = 3
     
     
+    
     //MARK: - LifeCycle Fuctions
     
     override func viewDidLoad() {
@@ -41,8 +42,7 @@ class PhotoAlbumViewController: UIViewController {
         setCenter()
         getFlickrPhoto()
         activityIndicator.startAnimating()
-        
-        
+        setupBarButtonItems()
     }
     
     
@@ -78,6 +78,81 @@ class PhotoAlbumViewController: UIViewController {
         self.present(alertVc, animated: true)
     }
     
+    
+    //MARK: - UICollectionView: Select Multiple items & delete UICollectionViewCell
+    
+    
+    // Define enum points
+    enum Mode {
+        case view
+        case select
+    }
+    
+    
+    // Dictionare for store status of indexPath
+    var dictionarySelectedIndexPath: [IndexPath: Bool] = [:]
+    
+    //Switch selected button on selection
+    var mMode: Mode = .view {
+        didSet {
+            switch mMode {
+            case.view:
+                for (key, value) in dictionarySelectedIndexPath {
+                    if value {
+                        collectionView.deselectItem(at: key, animated: true)
+                    }
+                }
+                
+                dictionarySelectedIndexPath.removeAll()
+                
+                selectBarButton.title = "Select"
+                navigationItem.leftBarButtonItem = nil
+                collectionView.allowsMultipleSelection = false
+            case.select:
+                selectBarButton.title = "Cancel"
+                navigationItem.leftBarButtonItem = deleteBarButton
+                collectionView.allowsMultipleSelection = true
+            }
+        }
+    }
+    
+    // Create UIBarButtons
+    
+    //Created select buttonItem
+    lazy var selectBarButton: UIBarButtonItem = {
+        let barButtonItem = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(didSelectButtonClicked(_:)))
+        return barButtonItem
+    }()
+    
+    //Created delete buttonItem
+    lazy var deleteBarButton: UIBarButtonItem = {
+        let barButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(didDeletButtonClicked(_:)))
+        return barButtonItem
+    }()
+    
+    
+    // Methods select & delete button clicked
+    
+    @objc func didSelectButtonClicked(_ sender: UIBarButtonItem) {
+        mMode =  mMode == .view ? .select : .view
+    }
+    
+    @objc func didDeletButtonClicked(_ sender: UIBarButtonItem) {
+        var deleteNeededIndexPaths: [IndexPath] = []
+        for (key, value) in dictionarySelectedIndexPath {
+            if value {
+                deleteNeededIndexPaths.append(key)
+            }
+        }
+        
+        
+    }
+    
+    // Setup bar buttonItem method
+    private func setupBarButtonItems() {
+        navigationItem.rightBarButtonItem = selectBarButton
+        
+    }
 
     //MARK: - Action Buttons
     
@@ -149,7 +224,7 @@ extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout, UICollec
     }
  
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-      
+    
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -157,3 +232,6 @@ extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout, UICollec
     }
     
 }
+
+
+
