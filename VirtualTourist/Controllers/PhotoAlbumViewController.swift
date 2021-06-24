@@ -26,13 +26,9 @@ class PhotoAlbumViewController: UIViewController {
     var currentLatitude: Double?
     var currentLongitude: Double?
     var pin: Pin!
-    var flickrPhotos: [URL]?
-    var savedImages: [Photo] = []
+    var flickrPhotos: [FlickrPhoto] = []
     let numbersOfColumns: CGFloat = 3
-    var collectionPhoto: [UIImage]?
-    //var fetchedResultsCOntroller: NSFetchedResultsController<Photo>
-    
-    var copiedFlickrObjectArray: FlickrClient = FlickrClient()
+  
     
     
     
@@ -49,14 +45,16 @@ class PhotoAlbumViewController: UIViewController {
         setupBarButtonItems()
     }
     
+    //MARK: - Fetch Core Data
     
+  
     
     //MARK: - Methods
     
     
     // Make a call to FlikrClient
     func getFlickrPhoto() {
-        FlickrClient.shared.getFlickrPhotos(lat: currentLatitude!, lon: currentLongitude!, page: 1, completion: { (urls, error) in
+        FlickrClient.shared.getFlickrPhotos(lat: currentLatitude!, lon: currentLongitude!, page: 1, completion: { (photos, error) in
             if let error = error {
                 DispatchQueue.main.async {
                     self.activityIndicator.stopAnimating()
@@ -64,8 +62,8 @@ class PhotoAlbumViewController: UIViewController {
                     print(error.localizedDescription)
                 }
             } else {
-                if let urls = urls {
-                    self.flickrPhotos = urls
+                if let photos = photos {
+                    self.flickrPhotos = photos
                     DispatchQueue.main.async {
                         self.collectionView.reloadData()
                         self.activityIndicator.stopAnimating()
@@ -106,7 +104,9 @@ class PhotoAlbumViewController: UIViewController {
                         collectionView.deselectItem(at: key, animated: true)
                     }
                 }
+                
                 dictionarySelectedIndexPath.removeAll()
+                
                 selectBarButton.title = "Select"
                 navigationItem.leftBarButtonItem = nil
                 collectionView.allowsMultipleSelection = false
@@ -148,7 +148,7 @@ class PhotoAlbumViewController: UIViewController {
         }
         
         
-       collectionView.deleteItems(at: deleteNeededIndexPaths)
+    collectionView.deleteItems(at: deleteNeededIndexPaths)
        dictionarySelectedIndexPath.removeAll()
         
     }
@@ -199,13 +199,13 @@ extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout, UICollec
     
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return flickrPhotos?.count ?? 0
+        return flickrPhotos.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FlickrViewCell", for: indexPath) as! FlickrViewCell
-        if let desiredArray = flickrPhotos {
-            cell.setupCell(url: desiredArray[indexPath.row])
+        if let url = URL(string: flickrPhotos[indexPath.row].imageURLString()) {
+            cell.setupCell(url: url)
         }
         return cell
     }

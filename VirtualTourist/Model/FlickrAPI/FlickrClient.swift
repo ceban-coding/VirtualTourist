@@ -17,8 +17,10 @@ class FlickrClient {
     
     var flickrBase = "https://api.flickr.com/services/rest/"
     var flickrSearch = "flickr.photos.search"
-   
-    func getFlickrPhotos(lat: Double, lon: Double, page: Int, completion: @escaping ([URL]?, Error?) -> Void) {
+    
+    var flickrObjects: [FlickrPhoto] = []
+    
+    func getFlickrPhotos(lat: Double, lon: Double, page: Int, completion: @escaping ([FlickrPhoto]?, Error?) -> Void) {
         
         guard var components = URLComponents(string: flickrBase) else {
             completion(nil, NetworkErrors.invalidComponents)
@@ -59,15 +61,9 @@ class FlickrClient {
             do {
                 let photoData = try decoder.decode(JsonFlickr.self, from: data)
                 print(photoData)
-                var urlData = [URL]()
                 
-                for i in 0...100 {
-                    let Photos = photoData.photos.photo
-                    if let addUrl: URL = URL(string: Photos[i].imageURLString()){
-                        urlData.append(addUrl)
-                   }
-                }
-                completion(urlData, nil)
+                let photos = Array(photoData.photos.photo.prefix(100))
+                completion(photos, nil)
             } catch {
                 completion(nil, error)
             }
