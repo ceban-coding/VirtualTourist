@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreData
 
-class PhotoAlbumViewController: UIViewController {
+class PhotoAlbumViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
     
     //MARK: - Outlets
@@ -28,7 +28,8 @@ class PhotoAlbumViewController: UIViewController {
     var pin: Pin!
     var flickrPhotos: [FlickrPhoto] = []
     let numbersOfColumns: CGFloat = 3
-  
+    var fetchedResultsController: NSFetchedResultsController<Photo>!
+    var savedPhotoObjects = [Photo]()
     
     
     
@@ -43,10 +44,23 @@ class PhotoAlbumViewController: UIViewController {
         getFlickrPhoto()
         activityIndicator.startAnimating()
         setupBarButtonItems()
+        setUpFetchedResultsController()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     //MARK: - Fetch Core Data
-    
+    fileprivate func setUpFetchedResultsController() {
+        let fetchedRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "imageURL", ascending: true)
+        fetchedRequest.sortDescriptors = [sortDescriptor]
+        
+        if let result = try? DataController.shared.viewContext.fetch(fetchedRequest) {
+            savedPhotoObjects = result
+            }
+        }
   
     
     //MARK: - Methods
@@ -204,9 +218,15 @@ extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout, UICollec
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FlickrViewCell", for: indexPath) as! FlickrViewCell
+        if savedPhotoObjects.count > 0 {
+                let photoObject = savedPhotoObjects[indexPath.row]
+                   let image = UIImage(data: photoObject.imageData!)
+                       cell.photoImage.image = image
+                }
         if let url = URL(string: flickrPhotos[indexPath.row].imageURLString()) {
             cell.setupCell(url: url)
         }
+        
         return cell
     }
     
