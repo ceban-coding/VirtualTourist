@@ -41,6 +41,8 @@ class PhotoAlbumViewController: UIViewController {
         setCenter()
         getFlickrPhoto()
         activityIndicator.startAnimating()
+        
+        
     }
     
     
