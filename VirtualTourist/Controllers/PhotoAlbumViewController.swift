@@ -29,6 +29,10 @@ class PhotoAlbumViewController: UIViewController {
     var flickrPhotos: [URL]?
     var savedImages: [Photo] = []
     let numbersOfColumns: CGFloat = 3
+    var collectionPhoto: [UIImage]?
+    //var fetchedResultsCOntroller: NSFetchedResultsController<Photo>
+    
+    var copiedFlickrObjectArray: FlickrClient = FlickrClient()
     
     
     
@@ -102,9 +106,7 @@ class PhotoAlbumViewController: UIViewController {
                         collectionView.deselectItem(at: key, animated: true)
                     }
                 }
-                
                 dictionarySelectedIndexPath.removeAll()
-                
                 selectBarButton.title = "Select"
                 navigationItem.leftBarButtonItem = nil
                 collectionView.allowsMultipleSelection = false
@@ -145,6 +147,9 @@ class PhotoAlbumViewController: UIViewController {
             }
         }
         
+        
+       collectionView.deleteItems(at: deleteNeededIndexPaths)
+       dictionarySelectedIndexPath.removeAll()
         
     }
     
@@ -224,10 +229,20 @@ extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout, UICollec
     }
  
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    
+        switch mMode {
+        case .view:
+          collectionView.deselectItem(at: indexPath, animated: true)
+            _ = collectionView.cellForItem(at: indexPath)
+        case .select:
+          dictionarySelectedIndexPath[indexPath] = true
+        }
+       
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if mMode == .select {
+          dictionarySelectedIndexPath[indexPath] = false
+        }
        
     }
     

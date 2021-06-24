@@ -28,6 +28,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     let manager = CLLocationManager()
     var latitude: Double?
     var longitude: Double?
+    var disclaimerHasBeenDisplayed = false
     
     //MARK: - LifeCycle Functions
  
@@ -50,6 +51,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         manager.delegate = self
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
+        
+        
     }
     
     
@@ -89,6 +92,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     @IBAction func editButtonPressed(_ sender: Any) {
         editButton.isEnabled = false
         cancelButton.isEnabled = true
+        
+        if disclaimerHasBeenDisplayed == false {
+                    disclaimerHasBeenDisplayed = true
+            
+            let alertVc = UIAlertController(title: "Delete Pin from MapView", message: "For deleting pin rom MapView, tap one time on pin!", preferredStyle: .alert)
+            alertVc.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            self.present(alertVc, animated: true)
+        }
+        
     }
     
    //MARK: - Add pin annotation
@@ -143,16 +155,38 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     //Returns the View associated with the specified annotation object
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let identifer = "annotation"
-        var view = mapView.dequeueReusableAnnotationView(withIdentifier: identifer) as? MKPinAnnotationView
-        if view == nil {
-            view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifer)
-            view!.canShowCallout = true
-            view!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-            return view
+        var pinView: MKPinAnnotationView
+        
+    
+        if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifer) as? MKPinAnnotationView {
+            pinView = annotationView
         } else {
-            view!.annotation = annotation
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifer)
         }
-        return view
+        
+        pinView.canShowCallout = true
+        pinView.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        pinView.annotation = annotation
+        return pinView
     }
+    
+    //MARK: - Delete annotations from Coredata and Mapview
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+            
+        if editButton.isEnabled == false {
+            let selectedAnnotation = view.annotation as? MKPointAnnotation
+            
+            for pin in annotations {
+                if pin.lat == selectedAnnotation?.coordinate.latitude &&
+                   pin.long == selectedAnnotation?.coordinate.longitude {
+                    mapView.removeAnnotation(selectedAnnotation!)
+                    DataController.shared.viewContext.delete(pin)
+                    DataController.shared.save()
+                }
+            }
+        }
+    }
+    
     
 }
