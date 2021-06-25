@@ -44,7 +44,7 @@ class PhotoAlbumViewController: UIViewController, NSFetchedResultsControllerDele
         getFlickrPhoto()
         activityIndicator.startAnimating()
         setupBarButtonItems()
-        setUpFetchedResultsController()
+        fetchRequest()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -52,15 +52,23 @@ class PhotoAlbumViewController: UIViewController, NSFetchedResultsControllerDele
     }
     
     //MARK: - Fetch Core Data
-    fileprivate func setUpFetchedResultsController() {
-        let fetchedRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "imageURL", ascending: true)
-        fetchedRequest.sortDescriptors = [sortDescriptor]
-        
-        if let result = try? DataController.shared.viewContext.fetch(fetchedRequest) {
-            savedPhotoObjects = result
-            }
+    fileprivate func fetchRequest() {
+        if fetchedResultsController == nil {
+            let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
+            let predicate = NSPredicate(format: "pin == %@", argumentArray: [pin!])
+            fetchRequest.predicate = predicate
+            let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: true)
+            fetchRequest.sortDescriptors = [sortDescriptor]
+            
+            fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: DataController.shared.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+            fetchedResultsController.delegate = self
         }
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            print("error performing fetch")
+        }
+    }
   
     
     //MARK: - Methods
@@ -78,6 +86,7 @@ class PhotoAlbumViewController: UIViewController, NSFetchedResultsControllerDele
             } else {
                 if let photos = photos {
                     self.flickrPhotos = photos
+                    self.savePhotoToCoreData(photos: photos)
                     DispatchQueue.main.async {
                         self.collectionView.reloadData()
                         self.activityIndicator.stopAnimating()
@@ -87,13 +96,28 @@ class PhotoAlbumViewController: UIViewController, NSFetchedResultsControllerDele
         })
     }
     
-    
+    // Alert  message method
     func showAlertMessage() {
         let alertVc = UIAlertController(title: "Error", message: "Error retrieving data", preferredStyle: .alert)
         alertVc.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         self.present(alertVc, animated: true)
     }
     
+    
+    // Save photos to coreData
+    func savePhotoToCoreData(photos: [FlickrPhoto]) {
+        
+        for flickrPhoto in photos {
+            let photo = Photo(context: DataController.shared.viewContext)
+            if let url = URL(string: flickrPhoto.imageURLString()) {
+              photo.imageData = try? Data(contentsOf: url)
+            }
+            photo.imageURL = flickrPhoto.imageURLString()
+            photo.pin = pin
+            savedPhotoObjects.append(photo)
+            DataController.shared.save()
+        }
+    }
     
     //MARK: - UICollectionView: Select Multiple items & delete UICollectionViewCell
     

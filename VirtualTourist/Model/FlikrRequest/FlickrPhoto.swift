@@ -9,6 +9,8 @@ import Foundation
 
 struct JsonFlickr: Codable {
     let photos: FlickrPhotoResponse
+    let page: Int
+    let pages: Int
 }
 
 struct FlickrPhotoResponse: Codable {
