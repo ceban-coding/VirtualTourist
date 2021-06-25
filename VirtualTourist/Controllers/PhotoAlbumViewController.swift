@@ -177,15 +177,31 @@ class PhotoAlbumViewController: UIViewController, NSFetchedResultsControllerDele
     }
     
     @objc func didDeletButtonClicked(_ sender: UIBarButtonItem) {
-        var deleteNeededIndexPaths: [IndexPath] = []
-        for (key, value) in dictionarySelectedIndexPath {
-            if value {
-                deleteNeededIndexPaths.append(key)
+        if let selectedIndexPaths = collectionView.indexPathsForSelectedItems {
+            for indexPath in selectedIndexPaths {
+                let savedPhoto = savedPhotoObjects[indexPath.row]
+                for photo in savedPhotoObjects {
+                    if photo.imageURL == savedPhoto.imageURL {
+                        DataController.shared.viewContext.delete(photo)
+                       try? DataController.shared.viewContext.save()
+                    }
+                }
             }
+            
+            showSavedResult()
+    
         }
         
+    
+    func showSavedResult() {
         
-    collectionView.deleteItems(at: deleteNeededIndexPaths)
+        DispatchQueue.main.async {
+            
+            self.collectionView.reloadData()
+        }
+    }
+        
+    
        dictionarySelectedIndexPath.removeAll()
         
     }
