@@ -44,7 +44,7 @@ class PhotoAlbumViewController: UIViewController, NSFetchedResultsControllerDele
         getFlickrPhoto()
         activityIndicator.startAnimating()
         setupBarButtonItems()
-        fetchRequest()
+        loadSavedData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -52,11 +52,10 @@ class PhotoAlbumViewController: UIViewController, NSFetchedResultsControllerDele
     }
     
     //MARK: - Fetch Core Data
-    fileprivate func fetchRequest() {
+    fileprivate func loadSavedData() {
         if fetchedResultsController == nil {
             let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
-            let predicate = NSPredicate(format: "pin == %@", argumentArray: [pin!])
-            fetchRequest.predicate = predicate
+                        
             let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: true)
             fetchRequest.sortDescriptors = [sortDescriptor]
             
@@ -200,7 +199,7 @@ class PhotoAlbumViewController: UIViewController, NSFetchedResultsControllerDele
     //MARK: - Action Buttons
     
     @IBAction func newCollectionButtonPressed(_ sender: Any) {
-        
+        collectionView.reloadData()
     }
     
     
@@ -237,18 +236,29 @@ extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout, UICollec
     
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return flickrPhotos.count
+        switch section {
+        case 0:
+            return fetchedResultsController.sections?[section].numberOfObjects ?? 0
+        default:
+            return flickrPhotos.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FlickrViewCell", for: indexPath) as! FlickrViewCell
-        if savedPhotoObjects.count > 0 {
-                let photoObject = savedPhotoObjects[indexPath.row]
-                   let image = UIImage(data: photoObject.imageData!)
-                       cell.photoImage.image = image
-                }
-        if let url = URL(string: flickrPhotos[indexPath.row].imageURLString()) {
-            cell.setupCell(url: url)
+        
+        switch indexPath.section {
+        case 0:
+            let photoObject = fetchedResultsController.object(at: indexPath)
+            DispatchQueue.main.async {
+                let image = UIImage(data: photoObject.imageData! as Data)
+                cell.photoImage.image = image
+            }
+        default:
+            let shuffledFlickrPhotos = flickrPhotos.shuffled()
+            if let url = URL(string: shuffledFlickrPhotos[indexPath.row].imageURLString()) {
+                cell.setupCell(url: url)
+            }
         }
         
         return cell
