@@ -312,6 +312,7 @@ extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout, UICollec
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         if mMode == .select {
           dictionarySelectedIndexPath[indexPath] = false
+        
         }
        
     }
